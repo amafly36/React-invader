@@ -1,0 +1,7 @@
+.invader {
+    background-image: url('../../Images/Invaders.png');
+    background-size: contain;
+    background-repeat: no-repeat;
+    width: 25rem;
+    height: 25rem;
+}

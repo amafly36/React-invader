@@ -1,6 +1,7 @@
 import React from "react"
+import { v4 as uuidv4 } from 'uuid'
 
-import Invaders from "./component/Invaders";
+import Invader from "./component/Invader/Invader";
 import Ship from "./component/Ship/Ship";
 
 import './App.css';
@@ -17,9 +18,30 @@ class App extends React.Component {
 			},
 			invaders : [
 				{
-					isDestroy : true,
-					coords : []
-				}
+					ID : uuidv4(),
+					isDestroy : false,
+					coords : [2, 0]
+				},	
+				{
+					ID : uuidv4(),
+					isDestroy : false,
+					coords : [3, 0]
+				},
+				{
+					ID : uuidv4(),
+					isDestroy : false,	
+					coords : [4, 0]
+				},	
+				{
+					ID : uuidv4(),
+					isDestroy : false,
+					coords : [5, 0]
+				},
+				{
+					ID : uuidv4(),
+					isDestroy : false,
+					coords : [6, 0]
+				},
 			]
 		}
 	}
@@ -45,14 +67,38 @@ class App extends React.Component {
 		});
 	}
 
+	handleCollision = e => {
+		let id =e.target.id
+
+		this.state.invaders.map(invader => {
+			if (id === invader.ID) {
+				let element = document.getElementById(invader.ID)
+			}
+		})
+	}
+
 	render() {
 
+		this.state.invaders.map(invader => {
+			console.log("mon invader", invader)
+		})
 		
 		return (
-			<div id="window">
-        		<Invaders />
+			<main>
+				<div className="Invaders-container">
+					{
+						this.state.invaders.map(invader => 
+							<Invader
+								key = {invader.ID}
+								id = {invader.ID}
+								isDestroy = {invader.isDestroy}
+								onClick = {this.handleCollision}
+							/>
+						)	
+					}
+				</div>
 				<Ship onKeyPress={this.handleKeyPress} />
-			</div>
+			</main>
 		)
 	}
 }
