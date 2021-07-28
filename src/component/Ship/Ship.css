@@ -1,0 +1,8 @@
+.playerShip {
+    position: absolute;
+    bottom: 5vh;
+    left: 100vh;
+    width: 15vh;
+    height : 5vh;
+    background-color: white;
+}
