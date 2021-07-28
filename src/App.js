@@ -12,8 +12,15 @@ class App extends React.Component {
 
 		this.state = {
       		start: false,
-			player : [],
-			invaders : []
+			player : {
+
+			},
+			invaders : [
+				{
+					isDestroy : true,
+					coords : []
+				}
+			]
 		}
 	}
 
@@ -39,6 +46,7 @@ class App extends React.Component {
 	}
 
 	render() {
+
 		
 		return (
 			<div id="window">

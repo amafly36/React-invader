@@ -6,3 +6,14 @@
     height : 5vh;
     background-color: white;
 }
+
+.invader {
+    width: 4rem;
+    height: 4rem;
+    background-image: "invader.png";
+    background-size: contain;
+}
+
+.destroy {
+    display: none;
+}

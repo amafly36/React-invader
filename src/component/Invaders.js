@@ -4,6 +4,17 @@ import invader from "./../Images/Invaders.png"
 
 class Invaders extends React.Component {
 
+    renderInvader() {
+
+        this.state.invaders.map(invader => {
+			invader
+			?
+				<div class="invader"></div>
+			:
+				<div class="invader destroy"></div>
+		})
+    }
+
     render() {
 
         return(
