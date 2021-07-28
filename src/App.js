@@ -1,25 +1,52 @@
-import logo from './logo.svg';
+import React from "react"
+
+import Invaders from "./component/Invaders";
+import Ship from "./component/Ship/Ship";
+
 import './App.css';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+class App extends React.Component {
+
+	constructor() {
+		super()
+
+		this.state = {
+      		start: false,
+			player : [],
+			invaders : []
+		}
+	}
+
+	handleKeyPress = e => {
+		let spaceShip = document.getElementById("spaceShip")
+
+		document.addEventListener("keydown", e => {
+			
+			switch (e.keyCode) {
+				case 37:
+					console.log(spaceShip);
+					break;
+				case 39:
+					console.log("Tourne à droite");
+					break;
+				case 32:
+					console.log("Tire");
+					break;
+				default:
+					break;
+			}
+		});
+	}
+
+	render() {
+		
+		return (
+			<div id="window">
+        		<Invaders />
+				<Ship onKeyPress={this.handleKeyPress} />
+			</div>
+		)
+	}
 }
 
 export default App;
