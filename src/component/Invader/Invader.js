@@ -1,20 +1,19 @@
 import React from "react";
 import Entity from "../Entity/Entity";
 
-// Image : 
-import invaders from "../../Images/Invaders.png"
+import image from "../../Images/Invaders.png"
 
 // CSS : 
 import "./Invader.css"
 
 
-const Invader = p => {
+const Invader = p =>
 
     <Entity
-        x="x" y={p.y}
+        x={p.x} y={p.y}
         width="50px" heigth="50px"
-        source={invaders}
+        source={image}
     />
-}
+
 
 export default Invader

@@ -82,10 +82,27 @@ class App extends React.Component {
             :
             <div>
 
-              <Ship />
               {/* Afficher les Invaders */}
+              <div>
+                <Invader x="100px" y="700px" mooveToBottom />
+                <Invader x="200px" y="700px" />
+                <Invader x="300px" y="700px" />
+                <Invader x="400px" y="700px" />
+                <Invader x="500px" y="700px" />
+                <Invader x="600px" y="700px" />
+                <Invader x="700px" y="700px" />
+                <Invader x="800px" y="700px" />
+                <Invader x="900px" y="700px" />
+                <Invader x="1000px" y="700px" />
+                <Invader x="1100px" y="700px" />
+                <Invader x="1200px" y="700px" />
+                <Invader x="1300px" y="700px" />
+                <Invader x="1400px" y="700px" />
+              </div>
 
-              {/* Afficher le vaisseau */}
+              {/* Afficher le vaiseau */}
+              <Ship x="700px" style={{ backgroundColor: "black" }} />
+
             </div>
 
 

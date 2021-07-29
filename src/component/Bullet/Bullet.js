@@ -1,19 +1,18 @@
 import React from "react";
 
-// Image :
-import bullet from "../../Images/bullet.png"
+import image from "../../Images/bullet.png"
 
 // CSS : 
 import "./Bullet.css"
 
 
-const Invader = p => {
+const Bullet = p => {
 
     <Entity
-        x="x" y={p.y}
+        x={p.x} y={p.y}
         width="10px" heigth="15px"
-        source={bullet}
+        source={image}
     />
 }
 
-export default Invader
+export default Bullet

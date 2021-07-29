@@ -11,7 +11,7 @@ function Entity({ x = 0, y = 0, width = null, heigth = null, source = null }) {
     }
 
     return (
-        <img style={style} source={source} />
+        <img style={style} src={source} />
     )
 }
 
