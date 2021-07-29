@@ -66,6 +66,9 @@ class App extends React.Component {
 		
 	}
 
+	renderHome() {
+		
+	}
 
 	render() {
 		
