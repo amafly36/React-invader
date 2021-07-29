@@ -21,6 +21,8 @@ class App extends React.Component {
 		this.state = {
 
 			isStarted: false,
+			count : 0,
+			threshold : 60,
 			player: {
 				x: 97,
 				speed: 1,
@@ -34,9 +36,55 @@ class App extends React.Component {
 
 
 	componentDidMount() {
+		let player = { ...this.state.player }
 
-		document.addEventListener("keydown", e => {
-			this.handleKeyPress(e.key)
+		document.addEventListener("keydown", key => {
+
+			switch (key.code) {
+				case "ArrowLeft":
+					player.toLeft = true
+					break;
+				case "ArrowRight":
+					player.toRight = true
+					break;
+				case "Space":
+					console.log("Piou piou");
+					break;
+				default:
+					break;
+			}
+
+			this.setState(state => {
+
+				return({
+					...state,
+					player : player
+				})
+			})
+		})
+
+		document.addEventListener("keyup", key => {
+			switch (key.code) {
+				case "ArrowLeft":
+					player.toLeft = false
+					break;
+				case "ArrowRight":
+					player.toRight = false
+					break;
+				case "Space":
+					console.log("Piou piou");
+					break;
+				default:
+					break;
+			}
+
+			this.setState(state => {
+
+				return({
+					...state,
+					player : player
+				})
+			})
 		})
 
 		let invaders = []
@@ -66,21 +114,28 @@ class App extends React.Component {
 		setInterval(this.thread, 16)
 	}
 
-
 	thread = () => {
-		let player = { ...this.state.player }
-		
-		this.state.invaders.map(invader => {
+		let { count, player, threshold } = this.state
 
-			if (invader.alive) {
-				invader.x = invader.x < 150 ? invader.x + 1 : 45
-			}
+		count++
+		if (count >= threshold) {
+			count = 0
+			
+			this.state.invaders.map(invader => {
 
-			return invader
-		})
+				if (invader.alive) {
+					invader.x = invader.x < 150 ? invader.x + 2 : 45
+				}
+	
+				return invader
+			})
+
+		}	this.setState({ count : count })
 
 		if (player.toRight) {
-			player.x += player.x < 150 ? player.speed : 150;
+			player.x = player.x + player.speed
+		} else if (player.toLeft) {
+			player.x = player.x - player.speed
 		}
 
 		if (this.state.player.x !== player.x) {
@@ -92,33 +147,6 @@ class App extends React.Component {
 				})
 			})
 		}
-	}
-
-	handleKeyPress = key => {
-		let player = { ...this.state.player }
-
-		switch (key) {
-			case "ArrowLeft":
-				player.x -= player.x - 1 < 0 ? 0 : player.x - 1;
-				break;
-			case "ArrowRight":
-				player.x += 1;
-				break;
-			case "Space":
-				console.log("Piou piou");
-				break;
-			default:
-				break;
-		}
-
-
-		this.setState(prevState => {
-
-			return ({
-				...prevState,
-				player: player
-			})
-		})
 	}
 
 	handleCollision = (type, entity, bullet) => {
