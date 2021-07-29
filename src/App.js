@@ -4,8 +4,8 @@ import React from "react"
 import './App.css';
 
 // Component :
-import Ship from "./component/Ship/Ship.js";
-import Invader from "./component/Invader/Invader";
+import Player from "./component/Player.js";
+import Invader from "./component/Invader";
 
 const GAME = {
 	player: { w: 0, h: 0 },
@@ -22,10 +22,10 @@ class App extends React.Component {
 
 			isStarted: false,
 			player: {
-				x: 4,
-				speed: 10,
+				x: 97,
+				speed: 1,
 				toLeft: false,
-				toRight: true
+				toRight: false
 			},
 			invaders: [
 			]
@@ -39,15 +39,48 @@ class App extends React.Component {
 			this.handleKeyPress(e.key)
 		})
 
+		let invaders = []
+		let ID = 0
+		
+		for (let y = 0; y < 3; y++) {
+
+			for (let x = 0; x < 6; x++) {
+
+				invaders.push({
+					ID : ID++,
+					alive : true,
+					x : x * 20 + 40,
+					y : y * 15 + 50,
+				})
+			}
+		}
+
+		this.setState(state => {
+
+			return ({
+				...state,
+				invaders : invaders
+			});
+		});
+
 		setInterval(this.thread, 16)
 	}
 
 
 	thread = () => {
 		let player = { ...this.state.player }
+		
+		this.state.invaders.map(invader => {
+
+			if (invader.alive) {
+				invader.x = invader.x < 150 ? invader.x + 1 : 45
+			}
+
+			return invader
+		})
 
 		if (player.toRight) {
-			player.x += player.speed;
+			player.x += player.x < 150 ? player.speed : 150;
 		}
 
 		if (this.state.player.x !== player.x) {
@@ -105,26 +138,20 @@ class App extends React.Component {
 							<div>
 
 								<div>
-									<Invader x="100px" y="700px" mooveToBottom />
-									<Invader x="200px" y="700px" />
-									<Invader x="300px" y="700px" />
-									<Invader x="400px" y="700px" />
-									<Invader x="500px" y="700px" />
-									<Invader x="600px" y="700px" />
-									<Invader x="700px" y="700px" />
-									<Invader x="800px" y="700px" />
-									<Invader x="900px" y="700px" />
-									<Invader x="1000px" y="700px" />
-									<Invader x="1100px" y="700px" />
-									<Invader x="1200px" y="700px" />
-									<Invader x="1300px" y="700px" />
-									<Invader x="1400px" y="700px" />
+									{
+										this.state.invaders.map(invader => 
+											invader.alive
+											?
+												<Invader
+													x ={invader.x}
+													y ={invader.y}
+												/>
+											: null
+										)
+									}
 								</div>
-
-								<Ship x={this.state.player.x} />
-								{/* Afficher les Invaders */}
-
-								{/* Afficher le vaisseau */}
+								
+								<Player x={this.state.player.x} />
 							</div>
 				}
 			</div>
