@@ -1,10 +1,13 @@
 import React from "react"
 import { v4 as uuidv4 } from 'uuid'
 
-import Invader from "./component/Invader/Invader";
-import Ship from "./component/Ship/Ship";
-
 import './App.css';
+
+const GAME = {
+	player = { w = 0, h = 0 },
+	invader = { w = 0, h = 0 },
+	bullet = { w = 0, h = 0 }
+}
 
 class App extends React.Component {
 
@@ -12,93 +15,76 @@ class App extends React.Component {
 		super()
 
 		this.state = {
-      		start: false,
-			player : {
 
+      		isStarted: false,
+			player : {
+				x : 4,
+				toLeft : false,
+				toRight : false,
 			},
 			invaders : [
-				{
-					ID : uuidv4(),
-					isDestroy : false,
-					coords : [2, 0]
-				},	
-				{
-					ID : uuidv4(),
-					isDestroy : false,
-					coords : [3, 0]
-				},
-				{
-					ID : uuidv4(),
-					isDestroy : false,	
-					coords : [4, 0]
-				},	
-				{
-					ID : uuidv4(),
-					isDestroy : false,
-					coords : [5, 0]
-				},
-				{
-					ID : uuidv4(),
-					isDestroy : false,
-					coords : [6, 0]
-				},
 			]
 		}
 	}
 
-	handleKeyPress = e => {
-		let spaceShip = document.getElementById("spaceShip")
-
+	componentDidMount() {
+		
 		document.addEventListener("keydown", e => {
-			
-			switch (e.keyCode) {
-				case 37:
-					console.log(spaceShip);
-					break;
-				case 39:
-					console.log("Tourne à droite");
-					break;
-				case 32:
-					console.log("Tire");
-					break;
-				default:
-					break;
-			}
-		});
-	}
-
-	handleCollision = e => {
-		let id =e.target.id
-
-		this.state.invaders.map(invader => {
-			if (id === invader.ID) {
-				let element = document.getElementById(invader.ID)
-			}
+			this.handleKeyPress(e.key)
 		})
 	}
+
+	handleKeyPress = key => {
+		let player = {...this.state.player}
+
+		switch (key) {
+			case "ArrowLeft":
+				console.log("vers la gauche")
+				player.x -= player.x - 1 < 0 ? 0 : player.x -1;
+				break;
+			case "ArrowRight":
+				player.x += 1;
+				break;
+			case "Space":
+				console.log("Piou piou");
+				break;
+			default:
+				break;
+		}
+
+		
+		this.setState(prevState => {
+			
+			return({
+				...prevState,
+				player : player
+			})
+		})
+	}
+
+	handleCollision = (type, entity, bullet) => {
+		
+	}
+
 
 	render() {
-
-		this.state.invaders.map(invader => {
-			console.log("mon invader", invader)
-		})
 		
 		return (
-			<main>
-				<div className="Invaders-container">
-					{
-						this.state.invaders.map(invader => 
-							<Invader
-								key = {invader.ID}
-								id = {invader.ID}
-								isDestroy = {invader.isDestroy}
-								onClick = {this.handleCollision}
-							/>
-						)	
-					}
-				</div>
-				<Ship onKeyPress={this.handleKeyPress} />
-			</main>
+			<div>
+				{ this.state.isStarted
+					? this.renderHome()
+					: this.state.isOver
+						? this.renderOver()
+						:
+							<div>
+								{/* Afficher les Invaders */}
+
+								{/* Afficher le vaisseau */}
+							</div>
+
+							
+				}
+			</div>
 		)
 	}
 }

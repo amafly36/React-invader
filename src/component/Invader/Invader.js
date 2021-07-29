@@ -1,14 +1,10 @@
 import React from "react";
 import "./Invader.css"
+import { Col } from 'react-grid-system';
 
 
-const Invader = etat =>
+const Invader = etat => {
 
-    !etat.isDestroy
-        ?
-            <div id={etat.id} class="invader" onClick={etat.onClick} />
-        :
-            null
-
+}
 
 export default Invader

@@ -1,16 +1,4 @@
 
-main {
-  display: flex;
-  justify-content: center;
-}
-
-.Invaders-container {
-  display: grid;
-  grid-template-columns: repeat(9, 1fr [col-start]);
-  grid-template-rows: repeat(15, 100vh [col-start]);
-  background-color: red;
-  width: 80%;
-}
 
 @media (prefers-reduced-motion: no-preference) {
   .App-logo {
