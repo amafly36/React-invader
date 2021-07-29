@@ -22,7 +22,7 @@ class App extends React.Component {
 			isStarted: false,
 			player: {
 				x: 4,
-				speed : 10,
+				speed: 10,
 				toLeft: false,
 				toRight: true
 			},
@@ -40,10 +40,10 @@ class App extends React.Component {
 
 		setInterval(this.thread, 16)
 	}
-	
+
 
 	thread = () => {
-		let player = {...this.state.player}
+		let player = { ...this.state.player }
 
 		if (player.toRight) {
 			player.x += player.speed;
@@ -52,9 +52,9 @@ class App extends React.Component {
 		if (this.state.player.x !== player.x) {
 			this.setState(state => {
 
-				return({
+				return ({
 					...state,
-					player : player
+					player: player
 				})
 			})
 		}
@@ -88,28 +88,43 @@ class App extends React.Component {
 	}
 
 	handleCollision = (type, entity, bullet) => {
-
 	}
-
 
 	render() {
 
 		return (
+
 			<div>
-				{this.state.isStarted
-					? this.renderHome()
-					: this.state.isOver
-						? this.renderOver()
-						:
-						<div>
+				{
+					this.state.isStarted
+						? this.renderHome()
+						: this.state.isOver
+							? this.renderOver()
+							:
+							<div>
 
-							<Ship x={this.state.player.x} />
-							{/* Afficher les Invaders */}
+								<div>
+									<Invader x="100px" y="700px" mooveToBottom />
+									<Invader x="200px" y="700px" />
+									<Invader x="300px" y="700px" />
+									<Invader x="400px" y="700px" />
+									<Invader x="500px" y="700px" />
+									<Invader x="600px" y="700px" />
+									<Invader x="700px" y="700px" />
+									<Invader x="800px" y="700px" />
+									<Invader x="900px" y="700px" />
+									<Invader x="1000px" y="700px" />
+									<Invader x="1100px" y="700px" />
+									<Invader x="1200px" y="700px" />
+									<Invader x="1300px" y="700px" />
+									<Invader x="1400px" y="700px" />
+								</div>
 
-							{/* Afficher le vaisseau */}
-						</div>
+								<Ship x={this.state.player.x} />
+								{/* Afficher les Invaders */}
 
-
+								{/* Afficher le vaisseau */}
+							</div>
 				}
 			</div>
 		)
