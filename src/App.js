@@ -1,6 +1,11 @@
 import React from "react"
 
+// CSS :
 import './App.css';
+
+// Component :
+import Ship from "./component/Ship/Ship.js";
+import Invader from "./component/Invader/Invader";
 
 const GAME = {
   player: { w: 0, h: 0 },
@@ -82,6 +87,8 @@ class App extends React.Component {
             ? this.renderOver()
             :
             <div>
+
+              <Ship />
               {/* Afficher les Invaders */}
 
               {/* Afficher le vaisseau */}
