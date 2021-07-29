@@ -5,100 +5,115 @@ import './App.css';
 
 // Component :
 import Ship from "./component/Ship/Ship.js";
-import Invader from "./component/Invader/Invader";
 
 const GAME = {
-  player: { w: 0, h: 0 },
-  invader: { w: 0, h: 0 },
-  bullet: { w: 0, h: 0 }
+	player: { w: 0, h: 0 },
+	invader: { w: 0, h: 0 },
+	bullet: { w: 0, h: 0 }
 }
 
 class App extends React.Component {
 
-  constructor() {
-    super()
+	constructor() {
+		super()
 
-    this.state = {
+		this.state = {
 
-      isStarted: false,
-      player: {
-        x: 4,
-        toLeft: false,
-        toRight: false,
-      },
-      invaders: [
-      ]
-    }
-  }
-
-  componentDidMount() {
-
-    document.addEventListener("keydown", e => {
-      this.handleKeyPress(e.key)
-    })
-
-    setInterval(this.thread.bind(this), 30)
-  }
-
-  thread() {
-    console.log("Vie du jeu")
-  }
-
-  handleKeyPress = key => {
-    let player = { ...this.state.player }
-
-    switch (key) {
-      case "ArrowLeft":
-        console.log("vers la gauche")
-        player.x -= player.x - 1 < 0 ? 0 : player.x - 1;
-        break;
-      case "ArrowRight":
-        player.x += 1;
-        break;
-      case "Space":
-        console.log("Piou piou");
-        break;
-      default:
-        break;
-    }
+			isStarted: false,
+			player: {
+				x: 4,
+				speed : 10,
+				toLeft: false,
+				toRight: true
+			},
+			invaders: [
+			]
+		}
+	}
 
 
-    this.setState(prevState => {
+	componentDidMount() {
 
-      return ({
-        ...prevState,
-        player: player
-      })
-    })
-  }
+		document.addEventListener("keydown", e => {
+			this.handleKeyPress(e.key)
+		})
 
-  handleCollision = (type, entity, bullet) => {
+		setInterval(this.thread, 16)
+	}
+	
 
-  }
+	thread = () => {
+		let player = {...this.state.player}
+
+		if (player.toRight) {
+			player.x += player.speed;
+		}
+
+		if (this.state.player.x !== player.x) {
+			this.setState(state => {
+
+				return({
+					...state,
+					player : player
+				})
+			})
+		}
+	}
+
+	handleKeyPress = key => {
+		let player = { ...this.state.player }
+
+		switch (key) {
+			case "ArrowLeft":
+				player.x -= player.x - 1 < 0 ? 0 : player.x - 1;
+				break;
+			case "ArrowRight":
+				player.x += 1;
+				break;
+			case "Space":
+				console.log("Piou piou");
+				break;
+			default:
+				break;
+		}
 
 
-  render() {
+		this.setState(prevState => {
 
-    return (
-      <div>
-        {this.state.isStarted
-          ? this.renderHome()
-          : this.state.isOver
-            ? this.renderOver()
-            :
-            <div>
+			return ({
+				...prevState,
+				player: player
+			})
+		})
+	}
 
-              <Ship />
-              {/* Afficher les Invaders */}
+	handleCollision = (type, entity, bullet) => {
 
-              {/* Afficher le vaisseau */}
-            </div>
+	}
 
 
-        }
-      </div>
-    )
-  }
+	render() {
+
+		return (
+			<div>
+				{this.state.isStarted
+					? this.renderHome()
+					: this.state.isOver
+						? this.renderOver()
+						:
+						<div>
+
+							<Ship x={this.state.player.x} />
+							{/* Afficher les Invaders */}
+
+							{/* Afficher le vaisseau */}
+						</div>
+
+
+				}
+			</div>
+		)
+	}
 }
 
 export default App;
