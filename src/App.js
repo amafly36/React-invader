@@ -31,6 +31,12 @@ class App extends React.Component {
     document.addEventListener("keydown", e => {
       this.handleKeyPress(e.key)
     })
+
+    setInterval(this.thread.bind(this), 30)
+  }
+
+  thread() {
+    console.log("Vie du jeu")
   }
 
   handleKeyPress = key => {
