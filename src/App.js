@@ -10,7 +10,15 @@ import Invader from "./component/Invader";
 const GAME = {
 	player: { w: 0, h: 0 },
 	invader: { w: 0, h: 0 },
-	bullet: { w: 0, h: 0 }
+	bullet: { w: 0, h: 0 },
+	window : {
+		min : {
+			w : 45
+		},
+		max : {
+			w : 150
+		}
+	}
 }
 
 class App extends React.Component {
@@ -90,15 +98,16 @@ class App extends React.Component {
 		let invaders = []
 		let ID = 0
 		
-		for (let y = 0; y < 3; y++) {
+		for (let y = 0; y < 4; y++) {
 
-			for (let x = 0; x < 6; x++) {
+			for (let x = 0; x < 9; x++) {
 
 				invaders.push({
 					ID : ID++,
 					alive : true,
-					x : x * 20 + 40,
-					y : y * 15 + 50,
+					x : x * 8 + 50,
+					y : y * 10 + 60,
+					toRight : true
 				})
 			}
 		}
@@ -116,6 +125,7 @@ class App extends React.Component {
 
 	thread = () => {
 		let { count, player, threshold } = this.state
+		let goDown = false
 
 		count++
 		if (count >= threshold) {
@@ -124,18 +134,32 @@ class App extends React.Component {
 			this.state.invaders.map(invader => {
 
 				if (invader.alive) {
-					invader.x = invader.x < 150 ? invader.x + 2 : 45
+					invader.x += 2
+
+					if (invader.x >= GAME.window.max.w) {
+						goDown = true
+					}
 				}
 	
 				return invader
 			})
 
-		}	this.setState({ count : count })
+			if (goDown) {
+				
+				this.state.invaders.map(invader => {
+					invader.x -= 60
+					invader.y -= 4
+
+					return invader
+				})
+			}
+
+		} this.setState({ count : count })
 
 		if (player.toRight) {
-			player.x = player.x + player.speed
+			player.x = (player.x +player.speed) <= GAME.window.max.w ? player.x + player.speed : GAME.window.max.w
 		} else if (player.toLeft) {
-			player.x = player.x - player.speed
+			player.x = (player.x -player.speed) >= GAME.window.min.w ? player.x - player.speed : GAME.window.min.w
 		}
 
 		if (this.state.player.x !== player.x) {
