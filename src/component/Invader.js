@@ -8,8 +8,8 @@ const Invader = p =>
 
     <Entity
         x={p.x} y={p.y}
-        width={5}
-        heigth={5}
+        width={4}
+        heigth={4}
         source={image}
     />
 
