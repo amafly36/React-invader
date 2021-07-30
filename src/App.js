@@ -22,10 +22,10 @@ class App extends React.Component {
 
 			isStarted: false,
 			count : 0,
-			threshold : 60,
+			threshold : 240,
 			player: {
 				x: 97,
-				speed: 1,
+				speed: 0.25,
 				toLeft: false,
 				toRight: false
 			},
@@ -111,7 +111,7 @@ class App extends React.Component {
 			});
 		});
 
-		setInterval(this.thread, 16)
+		setInterval(this.thread, 4)
 	}
 
 	thread = () => {
