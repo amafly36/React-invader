@@ -6,7 +6,7 @@ import './App.css';
 // Component :
 import Player from "./component/Player.js";
 import Invader from "./component/Invader";
-import TitleScreen from "./component/TitleScreen";
+import StarGame from "./component/StarGame";
 const GAME = {
 	player: { w: 0, h: 0 },
 	invader: { w: 0, h: 0 },
@@ -184,6 +184,7 @@ class App extends React.Component {
 				{
 					this.state.isStarted
 						? this.renderHome()
+						
 						: this.state.isOver
 							? this.renderOver()
 							:
