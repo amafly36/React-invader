@@ -6,7 +6,7 @@ import './App.css';
 // Component :
 import Player from "./component/Player.js";
 import Invader from "./component/Invader";
-
+import TitleScreen from "./component/TitleScreen";
 const GAME = {
 	player: { w: 0, h: 0 },
 	invader: { w: 0, h: 0 },
