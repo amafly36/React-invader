@@ -1,4 +1,5 @@
 import React from "react"
+import { v4 as uuidv4 } from 'uuid';
 
 // CSS :
 import './App.css';
@@ -7,10 +8,14 @@ import './App.css';
 import Player from "./component/Player.js";
 import Invader from "./component/Invader";
 import StarGame from "./component/StarGame";
+import Bullet from "./component/Bullet";
+
+import TitleScreen from "./component/StarGame";
 const GAME = {
-	player: { w: 0, h: 0 },
-	invader: { w: 0, h: 0 },
-	bullet: { w: 0, h: 0 },
+
+	player: { w: 6, h: 7 },
+	invader: { w: 4, h: 4 },
+	bullet: { w: 0.8, h: 4 },
 	window : {
 		min : {
 			w : 45
@@ -24,26 +29,34 @@ const GAME = {
 class App extends React.Component {
 
 	constructor() {
+
 		super()
 
 		this.state = {
 
 			isStarted: false,
 			count : 0,
-			threshold : 240,
+			thread : undefined,
+			threshold : 1,
 			player: {
+				size : GAME.player,
 				x: 97,
+				y : 0,
 				speed: 0.25,
 				toLeft: false,
-				toRight: false
+				toRight: false,
+				fire: {
+					active : false,
+					x : 0,
+					y : 0,
+				}
 			},
-			invaders: [
-			]
+			invaders: []
 		}
 	}
 
-
 	componentDidMount() {
+
 		let player = { ...this.state.player }
 
 		document.addEventListener("keydown", key => {
@@ -56,7 +69,14 @@ class App extends React.Component {
 					player.toRight = true
 					break;
 				case "Space":
-					console.log("Piou piou");
+
+					if (!player.fire.active) {
+
+						player.fire.active =true
+						player.fire.x = player.x + 2.65
+						player.fire.y = 7
+					}
+					
 					break;
 				case "Enter":
 
@@ -77,6 +97,7 @@ class App extends React.Component {
 			this.setState(state => {
 
 				return({
+
 					...state,
 					player : player
 				})
@@ -84,15 +105,13 @@ class App extends React.Component {
 		})
 
 		document.addEventListener("keyup", key => {
+			
 			switch (key.code) {
 				case "ArrowLeft":
 					player.toLeft = false
 					break;
 				case "ArrowRight":
 					player.toRight = false
-					break;
-				case "Space":
-					console.log("Piou piou");
 					break;
 				default:
 					break;
@@ -110,15 +129,17 @@ class App extends React.Component {
 		let invaders = []
 		let ID = 0
 		
-		for (let y = 0; y < 4; y++) {
+		for (let y = 0; y < 5; y++) {
 
-			for (let x = 0; x < 9; x++) {
+			for (let x = 0; x < 11; x++) {
 
 				invaders.push({
+
 					ID : ID++,
+					size : GAME.invader,
 					alive : true,
-					x : x * 8 + 50,
-					y : y * 10 + 60,
+					x : x * 5 + 50,
+					y : y * 5 + 50,
 					toRight : true
 				})
 			}
@@ -132,20 +153,35 @@ class App extends React.Component {
 			});
 		});
 
-		setInterval(this.thread, 4)
+		this.tread = setInterval(this.thread, 4)
 	}
 
 	thread = () => {
-		let { count, player, threshold } = this.state
+		let { count, invaders, player } = this.state
 		let goDown = false
 
 		count++
-		if (count >= threshold) {
+		if ((count / 60 ) % 2 === 0) {
+
 			count = 0
 			
-			this.state.invaders.map(invader => {
-
+			invaders.map(invader => {
+				
 				if (invader.alive) {
+
+					if (
+						( (player.x - GAME.player.w /2) < invader.x && (player.x + GAME.player.w /2) > invader.x ) &&
+						( invader.y <= 2 + (GAME.player.h -2))
+					) {
+						this.setState(state => {
+							
+							return({
+								...state,
+								isOver : true
+							});
+						});
+					}
+
 					invader.x += 2
 
 					if (invader.x >= GAME.window.max.w) {
@@ -158,23 +194,27 @@ class App extends React.Component {
 
 			if (goDown) {
 				
-				this.state.invaders.map(invader => {
+				invaders.map(invader => {
+
 					invader.x -= 60
 					invader.y -= 4
 
 					return invader
-				})
+				});
 			}
 
 		} this.setState({ count : count })
 
 		if (player.toRight) {
+
 			player.x = (player.x +player.speed) <= GAME.window.max.w ? player.x + player.speed : GAME.window.max.w
 		} else if (player.toLeft) {
+
 			player.x = (player.x -player.speed) >= GAME.window.min.w ? player.x - player.speed : GAME.window.min.w
 		}
 
 		if (this.state.player.x !== player.x) {
+
 			this.setState(state => {
 
 				return ({
@@ -183,9 +223,69 @@ class App extends React.Component {
 				})
 			})
 		}
+
+		if (player.fire.active) {
+			player.fire.y += 1
+
+			if (player.fire.y * (window.innerHeight *0.0001) > 9) {
+				
+				player.fire.active = false
+				player.fire.x = 0
+				player.fire.y = 7
+
+			} else {
+
+				for (let i = 0; i < invaders.length; i++) {
+					let invader = this.state.invaders[i]
+
+					if (this.handleCollision({ type : "invader", entity : invader }, { type : "bullet", entity : player.fire })) {
+
+						invaders[i].alive = false
+						player.fire.active = false
+					}
+				}
+			}
+
+			this.setState(state => {
+
+				return({
+					
+					...state,
+					player : player
+				})
+			})
+		}
 	}
 
-	handleCollision = (type, entity, bullet) => {
+	handleCollision = (target, from) => {
+		let w, h;
+
+		switch (target.type) {
+
+			case "invader":
+			case "player":
+				w = GAME[target.type].w;
+				h = GAME[target.type].h;
+
+				break;
+
+			default:
+				w = 0;
+				h = 0;
+		}
+
+		return (
+			target.type === "invader" && !target.entity.alive
+			? null
+			:
+				( (target.entity.x - w /2) < from.entity.x && (target.entity.x + w / 2) > from.entity.x ) &&
+				( (target.entity.y - h /2) < from.entity.y && (target.entity.y + h / 2) > from.entity.y)
+
+		)
+	}
+
+	renderOver() {
+		clearInterval(this.thread)
 	}
 
 	render() {
@@ -209,8 +309,9 @@ class App extends React.Component {
 											invader.alive
 											?
 												<Invader
-													x ={invader.x}
-													y ={invader.y}
+													key	= {uuidv4()}
+													x	= {invader.x}
+													y	= {invader.y}
 												/>
 											: null
 										)
@@ -218,6 +319,16 @@ class App extends React.Component {
 								</div>
 								
 								<Player x={this.state.player.x} />
+
+								{
+									this.state.player.fire.active
+									?
+										<Bullet
+											x ={this.state.player.fire.x}
+											y ={this.state.player.fire.y}
+										/>
+									: null
+								}
 							</div>
 				}
 			</div>

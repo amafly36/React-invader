@@ -3,6 +3,9 @@
   margin: 15rem auto;
   color: #FFF;
 }
+#root > div {
+  user-select: none;
+}
 
 @media (prefers-reduced-motion: no-preference) {
   .App-logo {
