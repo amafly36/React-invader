@@ -58,6 +58,18 @@ class App extends React.Component {
 				case "Space":
 					console.log("Piou piou");
 					break;
+				case "Enter":
+
+					if (!this.state.isStarted)
+				
+						this.setState(state => {
+
+							return({
+								...state,
+								isStarted : true
+							})
+						})
+
 				default:
 					break;
 			}
@@ -182,8 +194,9 @@ class App extends React.Component {
 
 			<div>
 				{
-					this.state.isStarted
-						? this.renderHome()
+					!this.state.isStarted
+						? <StarGame />
+						
 						
 						: this.state.isOver
 							? this.renderOver()

@@ -1,4 +1,8 @@
-
+.centerScreen {
+  width: 15rem;
+  margin: 15rem auto;
+  color: #FFF;
+}
 
 @media (prefers-reduced-motion: no-preference) {
   .App-logo {
