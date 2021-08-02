@@ -1,4 +1,6 @@
-
+#root > div {
+  user-select: none;
+}
 
 @media (prefers-reduced-motion: no-preference) {
   .App-logo {
