@@ -6,6 +6,7 @@ import './App.css';
 // Component :
 import Player from "./component/Player.js";
 import Invader from "./component/Invader";
+import Bullet from "./component/Bullet";
 
 import TitleScreen from "./component/StarGame";
 const GAME = {
@@ -36,13 +37,17 @@ class App extends React.Component {
 				x: 97,
 				speed: 0.25,
 				toLeft: false,
-				toRight: false
+				toRight: false,
+				fire: {
+					active : false,
+					x : 0,
+					y : 0,
+				}
 			},
 			invaders: [
 			]
 		}
 	}
-
 
 	componentDidMount() {
 		let player = { ...this.state.player }
@@ -57,7 +62,13 @@ class App extends React.Component {
 					player.toRight = true
 					break;
 				case "Space":
-					console.log("Piou piou");
+
+					if (!player.fire.active) {
+						player.fire.active =true
+						player.fire.x = player.x + 2.65
+						player.fire.y = 7
+					}
+					
 					break;
 				default:
 					break;
@@ -73,15 +84,13 @@ class App extends React.Component {
 		})
 
 		document.addEventListener("keyup", key => {
+			
 			switch (key.code) {
 				case "ArrowLeft":
 					player.toLeft = false
 					break;
 				case "ArrowRight":
 					player.toRight = false
-					break;
-				case "Space":
-					console.log("Piou piou");
 					break;
 				default:
 					break;
@@ -99,15 +108,15 @@ class App extends React.Component {
 		let invaders = []
 		let ID = 0
 		
-		for (let y = 0; y < 4; y++) {
+		for (let y = 0; y < 5; y++) {
 
-			for (let x = 0; x < 9; x++) {
+			for (let x = 0; x < 11; x++) {
 
 				invaders.push({
 					ID : ID++,
 					alive : true,
-					x : x * 8 + 50,
-					y : y * 10 + 60,
+					x : x * 5 + 50,
+					y : y * 5 + 60,
 					toRight : true
 				})
 			}
@@ -133,7 +142,7 @@ class App extends React.Component {
 			count = 0
 			
 			this.state.invaders.map(invader => {
-
+				
 				if (invader.alive) {
 					invader.x += 2
 
@@ -172,6 +181,24 @@ class App extends React.Component {
 				})
 			})
 		}
+
+		if (player.fire.active) {
+
+			player.fire.y += 1
+
+			if (player.fire.y * (window.innerHeight *0.0001) > 9) {
+				player.fire.active = false
+				player.fire.x = 0
+				player.fire.y = 7
+			}
+			this.setState(state => {
+
+				return({
+					...state,
+					player : player
+				})
+			})
+		}
 	}
 
 	handleCollision = (type, entity, bullet ,StarGame) => {
@@ -205,6 +232,16 @@ class App extends React.Component {
 								</div>
 								
 								<Player x={this.state.player.x} />
+
+								{
+									this.state.player.fire.active
+									?
+										<Bullet
+											x ={this.state.player.fire.x}
+											y ={this.state.player.fire.y}
+										/>
+									: null
+								}
 							</div>
 				}
 			</div>
