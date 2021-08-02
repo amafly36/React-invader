@@ -1,5 +1,6 @@
 import React from "react"
 
+// CSS :
 import './App.css';
 
 // Component :
@@ -10,9 +11,17 @@ import Header from "./component/Header";
 import Landing from "./component/Landing"
 
 const GAME = {
-  player: { w: 0, h: 0 },
-  invader: { w: 0, h: 0 },
-  bullet: { w: 0, h: 0 }
+	player: { w: 0, h: 0 },
+	invader: { w: 0, h: 0 },
+	bullet: { w: 0, h: 0 },
+	window : {
+		min : {
+			w : 45
+		},
+		max : {
+			w : 150
+		}
+	}
 }
 
 class App extends React.Component {
