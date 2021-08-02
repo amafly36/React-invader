@@ -7,6 +7,7 @@ import './App.css';
 import Player from "./component/Player.js";
 import Invader from "./component/Invader";
 
+import TitleScreen from "./component/StarGame";
 const GAME = {
 	player: { w: 0, h: 0 },
 	invader: { w: 0, h: 0 },
@@ -173,7 +174,7 @@ class App extends React.Component {
 		}
 	}
 
-	handleCollision = (type, entity, bullet) => {
+	handleCollision = (type, entity, bullet ,StarGame) => {
 	}
 
 	render() {
