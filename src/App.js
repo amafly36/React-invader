@@ -8,6 +8,8 @@ import './App.css';
 import Player from "./component/Player.js";
 import Invader from "./component/Invader";
 import Bullet from "./component/Bullet";
+import Header from "./component/Header";
+import Landing from "./component/Landing"
 
 import TitleScreen from "./component/StarGame";
 const GAME = {
@@ -280,11 +282,12 @@ class App extends React.Component {
 		return (
 
 			<div>
+				<Header />
 				{
 					this.state.isStarted
 						? this.renderHome()
 						: this.state.isOver
-							? this.renderOver()
+							? <Landing />
 							:
 							<div>
 
