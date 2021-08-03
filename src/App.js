@@ -3,17 +3,24 @@ import { v4 as uuidv4 } from 'uuid';
 
 // CSS :
 import './App.css';
+import shoot from "./Sounds/shoot.wav"
 
 // Component :
 import Player from "./component/Player.js";
 import Invader from "./component/Invader";
 import Bullet from "./component/Bullet";
+import shootSound from "./Sounds/shoot.wav"
+import moveInvader1 from "./Sounds/moveinvader1.ogg"
+import moveInvader2 from "./Sounds/moveinvader2.ogg"
+import moveInvader3 from "./Sounds/moveinvader3.ogg"
+import moveInvader4 from "./Sounds/moveinvader4.ogg"
 
 import TitleScreen from "./component/StarGame";
+import { Howl } from "howler";
 const GAME = {
 
-	player: { w: 6, h: 7 },
-	invader: { w: 4, h: 4 },
+	player: { w: 6, h: 7, sounds : shootSound },
+	invader: { w: 4, h: 4, sounds : [ moveInvader1, moveInvader2, moveInvader3, moveInvader4 ] },
 	bullet: { w: 0.8, h: 4 },
 	window : {
 		min : {
@@ -35,6 +42,7 @@ class App extends React.Component {
 
 			isStarted: false,
 			count : 0,
+			sound : 0,
 			thread : undefined,
 			threshold : 1,
 			player: {
@@ -53,7 +61,16 @@ class App extends React.Component {
 			invaders: []
 		}
 	}
+	playSound(sound) {
 
+		let player = new Howl(
+			{
+				src : [sound]
+		 	}
+		);
+		  
+		player.play('laser');
+	}
 	componentDidMount() {
 
 		let player = { ...this.state.player }
@@ -70,6 +87,7 @@ class App extends React.Component {
 				case "Space":
 
 					if (!player.fire.active) {
+						this.playSound(GAME.player.sounds)
 
 						player.fire.active =true
 						player.fire.x = player.x + 2.65
@@ -144,17 +162,24 @@ class App extends React.Component {
 	}
 
 	thread = () => {
-		let { count, invaders, player } = this.state
+		let { count, sound, invaders, player } = this.state
 		let goDown = false
 
 		count++
-		if ((count / 60 ) % 2 === 0) {
-
+		if ( (count / 60 ) % 2 === 0 ) {
 			count = 0
-			
+			console.log(sound)
+
 			invaders.map(invader => {
 				
 				if (invader.alive) {
+
+					this.playSound(GAME.invader.sounds[0])
+
+					if (sound > 3) {
+						console.log(sound, "plus grand que 3")
+						sound = 0
+					}
 
 					if (
 						( (player.x - GAME.player.w /2) < invader.x && (player.x + GAME.player.w /2) > invader.x ) &&
@@ -169,7 +194,10 @@ class App extends React.Component {
 						});
 					}
 
+
+
 					invader.x += 2
+
 
 					if (invader.x >= GAME.window.max.w) {
 						goDown = true
@@ -189,6 +217,8 @@ class App extends React.Component {
 					return invader
 				});
 			}
+
+			this.setState({ sound : sound })
 
 		} this.setState({ count : count })
 
