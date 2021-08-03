@@ -7,10 +7,10 @@ import './App.css';
 // Component :
 import Player from "./component/Player.js";
 import Invader from "./component/Invader";
+import StarGame from "./component/StarGame";
 import Bullet from "./component/Bullet";
 import Header from "./component/Header";
 import Landing from "./component/Landing"
-import StarGame from "./component/StarGame";
 
 const GAME = {
 
@@ -302,8 +302,7 @@ class App extends React.Component {
 				<Header />
 				{
 					!this.state.isStarted
-						? <StarGame />
-						
+						? <StarGame />			
 						: this.state.isOver
 							? this.renderOver() 
 							:

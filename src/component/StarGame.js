@@ -1,12 +1,15 @@
-import React from 'react';
+import React, { Component } from 'react'
 
-export default class TitleScreen extends React.Component {
+export class StarGame extends Component {
 
 	render() {
+
 		return (
 			<div className="centerScreen">
-				<span>Press Enter to start the game!</span>
+				<span>Press Enter to start the game!</span>	
 			</div>
-		);
+		)
 	}
 }
+
+export default StarGame
