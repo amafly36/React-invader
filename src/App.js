@@ -10,8 +10,8 @@ import Invader from "./component/Invader";
 import Bullet from "./component/Bullet";
 import Header from "./component/Header";
 import Landing from "./component/Landing"
+import StarGame from "./component/StarGame";
 
-import TitleScreen from "./component/StarGame";
 const GAME = {
 
 	player: { w: 6, h: 7 },
@@ -36,6 +36,7 @@ class App extends React.Component {
 		this.state = {
 
 			isStarted: false,
+			isOver : false,
 			count : 0,
 			thread : undefined,
 			threshold : 1,
@@ -79,6 +80,12 @@ class App extends React.Component {
 					}
 					
 					break;
+
+				case "Enter":
+
+						if (!this.state.isStarted)
+							this.init()
+					break
 				default:
 					break;
 			}
@@ -114,35 +121,6 @@ class App extends React.Component {
 				})
 			})
 		})
-
-		let invaders = []
-		let ID = 0
-		
-		for (let y = 0; y < 5; y++) {
-
-			for (let x = 0; x < 11; x++) {
-
-				invaders.push({
-
-					ID : ID++,
-					size : GAME.invader,
-					alive : true,
-					x : x * 5 + 50,
-					y : y * 5 + 50,
-					toRight : true
-				})
-			}
-		}
-
-		this.setState(state => {
-
-			return ({
-				...state,
-				invaders : invaders
-			});
-		});
-
-		this.tread = setInterval(this.thread, 4)
 	}
 
 	thread = () => {
@@ -275,6 +253,45 @@ class App extends React.Component {
 
 	renderOver() {
 		clearInterval(this.thread)
+		
+		return (
+			<Landing onClick={this.init} />
+		)
+	}
+
+	init = () => {
+		let invaders = []
+		let ID = 0
+		
+
+		for (let y = 0; y < 5; y++) {
+
+			for (let x = 0; x < 11; x++) {
+
+				invaders.push({
+
+					ID : ID++,
+					size : GAME.invader,
+					alive : true,
+					x : x * 5 + 50,
+					y : y * 5 + 50,
+					toRight : true
+				})
+			}
+		}
+
+
+		this.setState(state => {
+
+			return ({
+				...state,
+				invaders : invaders,
+				isStarted : true,
+				isOver : false
+			});
+		});
+
+		this.tread = setInterval(this.thread, 4)
 	}
 
 	render() {
@@ -284,10 +301,11 @@ class App extends React.Component {
 			<div>
 				<Header />
 				{
-					this.state.isStarted
-						? this.renderHome()
+					!this.state.isStarted
+						? <StarGame />
+						
 						: this.state.isOver
-							? <Landing />
+							? this.renderOver() 
 							:
 							<div>
 
